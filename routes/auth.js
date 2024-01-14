@@ -35,5 +35,8 @@ router.put(
 router.post('/login', authController.login);
 
 router.get('/user/status', isAuth, authController.getUserStatus);
+router.patch('/user/status', isAuth, [
+  body('status').trim().not().isEmpty()
+],authController.setUserStatus);
 
 module.exports = router;
