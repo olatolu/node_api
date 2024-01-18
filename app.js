@@ -73,6 +73,7 @@ mongoose
     const server = app.listen(8080);
     const io = require('./socket').init(server);
     io.on('connection', socket => {
+      // console.log('socke',socket);
       console.log("socket connected");
 
     });

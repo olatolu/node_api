@@ -60,14 +60,13 @@ exports.createPost = async (req, res, next) => {
     creator = user;
     user.posts.push(post);
     await user.save();
-
+    socket.getIO().emit('posts', {action:'create', post:post});
     res.status(201).json({
       message: "Post created successfully!",
       post: post,
       creator: { _id: creator._id, name: creator.name },
     });
 
-    socket.getIO.emmit('posts', {action:'create', post:post})
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
@@ -109,8 +108,8 @@ exports.updatePost = async (req, res, next) => {
       error.statusCode = 422;
       throw error;
     }
-    const post = await Post.findById(postId);
-    if (post.creator.toString() !== req.userId) {
+    const post = await Post.findById(postId).populate('creator');
+    if (post.creator._id.toString() !== req.userId) {
       const error = new Error("Not authorized!");
       error.statusCode = 403;
       throw error;
@@ -122,7 +121,8 @@ exports.updatePost = async (req, res, next) => {
     post.imageUrl = imageUrl;
     post.content = content;
     const result = await post.save();
-
+    console.log('socket.getIO',socket.getIO);
+    socket.getIO().emit('posts', {action:'update', post:post});
     res.status(200).json({ message: "Post updated!", post: result });
   } catch (err) {
     if (!err.statusCode) {
