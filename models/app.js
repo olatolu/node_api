@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const multer = require('multer');
-const graphqlHttp = require('express-graphql').graphqlHTTP;
+const graphqlHttp = require('express-graphql');
 
 const graphqlSchema = require('./graphql/schema');
 const graphqlResolver = require('./graphql/resolvers');
@@ -83,7 +83,7 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(
-    'mongodb://adminuser:RtEr3Dwr48ewr786@75.119.135.61:27015/node_shop?authSource=admin'
+    'mongodb+srv://maximilian:9u4biljMQc4jjqbe@cluster0-ntrwp.mongodb.net/messages?retryWrites=true'
   )
   .then(result => {
     app.listen(8080);
